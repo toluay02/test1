@@ -9,13 +9,6 @@ parameters:
     default: "{CIRCLE_WORKFLOW_ID:0:7}"
 
 commands:
-  slack-notification_on_fail:
-    steps:
-      - slack/notify:
-          event: fail
-          mentions: '@Peter Abolude'
-          template: basic_fail_1
-
   destroy-environment:
     description: delete stacks on failure
     parameters:
@@ -72,7 +65,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - slack-notification_on_fail
+      
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -89,7 +82,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - slack-notification_on_fail
+      
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -103,7 +96,6 @@ jobs:
             cd frontend
             npm install
             npm run test
-      - slack-notification_on_fail
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -117,7 +109,7 @@ jobs:
             cd backend
             npm install
             npm run test
-      - slack-notification_on_fail
+   
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -134,7 +126,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical --force
-      - slack-notification_on_fail
+    
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -148,7 +140,7 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
-      - slack-notification_on_fail
+      
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -194,7 +186,7 @@ jobs:
       - checkout
       - add_ssh_keys:
          fingerprints:
-          - "fb:46:c1:16:0c:ff:78:dd:73:0c:ee:9e:95:07:1e:51"
+          - "01:12:0d:c4:0e:b8:27:3f:6b:00:14:9d:78:ea:dd:0b"
       - run:
           name: Install dependencies
           command: |
@@ -299,7 +291,7 @@ jobs:
       - checkout
       - add_ssh_keys:
          fingerprints:
-          - "fb:46:c1:16:0c:ff:78:dd:73:0c:ee:9e:95:07:1e:51"
+          - "01:12:0d:c4:0e:b8:27:3f:6b:00:14:9d:78:ea:dd:0b"
       - run:
           name: Install dependencies
           command: |
